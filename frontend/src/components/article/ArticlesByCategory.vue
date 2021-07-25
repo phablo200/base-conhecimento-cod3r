@@ -4,6 +4,8 @@
             :main='category.name' sub='Categoria'
         />
 
+        <Search @toSearch="toSearch" />
+        
         <ul>
             <li v-for='article in articles' :key='article.id'>
                 <ArticleItem :article='article' />
@@ -12,7 +14,7 @@
 
         <div class="load-more">
             <button v-if='loadMore' class='btn btn-lg btn-outline-primary' 
-                @click='getArticles'>
+                @click='() => getArticles(true)'>
                 Carregar mais artigos
             </button>
         </div>
@@ -24,16 +26,18 @@ import {baseApiUrl} from '@/global'
 import axios from 'axios'
 import PageTitle from '../template/PageTitle'
 import ArticleItem from './ArticleItem'
+import Search from '@/components/template/Search';
 
 export default {
     name: 'ArticlesByCategory',
-    components: { PageTitle, ArticleItem },
+    components: { PageTitle, ArticleItem, Search },
     data () {
         return {
             category: {},
             articles: [],
             page: 1,
-            loadMore: false
+            loadMore: false,
+            search: ''
         }
     },
     methods: {
@@ -43,18 +47,32 @@ export default {
                 this.category = res.data    
             })
         },
-        getArticles () {
-            const url = `${baseApiUrl}/categories/${this.category.id}/articles?page=${this.page}`
-            axios(url).then(res => {
-                this.articles = this.articles.concat(res.data.articles)
-                this.page++
+        getArticles (loadMore = false) {
+            const params = {
+                page: this.page,
+                search: this.search
+            }
 
-                if (res.data.length > this.articles.length) {
-                    this.loadMore = true
+            const url = `${baseApiUrl}/categories/${this.category.id}/articles`
+            axios(url, {params: { ...params }}).then(res => {
+                if (loadMore) {
+                    this.articles = this.articles.concat(res.data.articles)
+                    this.page++
+
+                    if (res.data.length > this.articles.length) {
+                        this.loadMore = true
+                    } else {
+                        this.loadMore = false
+                    }
                 } else {
-                    this.loadMore = false
-                }
+                    this.articles = res.data.articles;
+                }   
             })
+        },
+        toSearch (search) {
+            this.page = 1;
+            this.search = search;
+            this.getArticles(false);
         }
     },
     watch: {

@@ -38,16 +38,16 @@ module.exports = app => {
         .post(app.api.article.save)
 
     app.route('/articles/:id')
-        .all(app.config.passport.authenticate())
+        //.all(app.config.passport.authenticate())
         .get(app.api.article.getById)
         .put(admin(app.api.article.save))
         .delete(admin(app.api.article.remove))
 
     app.route('/categories/:id/articles')
-        .all(app.config.passport.authenticate())
+        //.all(app.config.passport.authenticate())
         .get(app.api.article.getByCategory)
 
     app.route('/stats')
-        .all(app.config.passport.authenticate())
+        //.all(app.config.passport.authenticate())
         .get(app.api.stat.get)
 }

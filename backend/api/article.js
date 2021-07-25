@@ -48,7 +48,7 @@ module.exports = app => {
         }
     }
 
-    const limit = 10 // usado para paginação
+    const limit = 10
     const get = async (req, res) => {
         const page = req.query.page || 1
         const search = req.query.search || '';
@@ -72,11 +72,6 @@ module.exports = app => {
         };
 
         res.json(data);
-        
-            
-            //.then(articles => res.json({ data: articles, count, limit }))
-            //.catch(err => res.status(500).send(err))
-        
     }
 
     const getById = (req, res) => {
@@ -91,33 +86,42 @@ module.exports = app => {
     }
 
     const getByCategory = async (req, res) => {
+        const search = req.query.search ?? null;
+
         const categoryId = req.params.id
         const page = req.query.page || 1
         const categories = await app.db.raw(queries.categoryWithChildren, categoryId)
         const ids = categories.rows.map(c => c.id)
 
-        const length = await app.db({a: 'articles', u: 'users'})
+        let length = app.db({a: 'articles', u: 'users'})
                 .whereRaw('?? = ??', ['u.id', 'a.userId'])
                 .whereIn('categoryId', ids)
-                .count('a.id')
-                .first()
+        if (search) {
+            length.where('a.name', 'LIKE', `%${search}%`);
+        }   
 
-        app.db({a: 'articles', u: 'users'})
+        length = await length.count('a.id').first();
+
+        const query = app.db({a: 'articles', u: 'users'})
             .select('a.id', 'a.name', 'a.description', 'a.imageUrl', {author: 'u.name'})
             .orderBy('id', 'asc')
-            .limit(limit).offset(page * limit - limit)
-            .whereRaw('?? = ??', ['u.id', 'a.userId'])
-            .whereIn('categoryId', ids)
-            .orderBy('a.id', 'desc')
-            .then(articles => {
-                const data = {
-                    articles,
-                    length: length.count
-                }
+            .limit(limit).offset(page * limit - limit);
 
-                return res.json(data)
-            })
-            .catch(err => res.status(500).send(err))
+        if (search) {
+            query.where('a.name', 'LIKE', `%${search}%`)
+            //    .orWhere('a.description', 'LIKE', `%${search}%`);
+        }
+
+        query.whereRaw('?? = ??', ['u.id', 'a.userId'])
+            .whereIn('categoryId', ids);
+            
+        console.log(query.toSQL().toNative());
+        const data = {
+            articles: await query,
+            length: length.count
+        };
+
+        res.json(data);
     }
 
     return { save, remove, get, getById, getByCategory }

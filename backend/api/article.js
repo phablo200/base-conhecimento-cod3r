@@ -109,13 +109,15 @@ module.exports = app => {
             .limit(limit).offset(page * limit - limit);
 
         if (search) {
-            query.where('a.name', 'LIKE', `%${search}%`)
-            //    .orWhere('a.description', 'LIKE', `%${search}%`);
+            query.where((builder) => (
+                builder.where('a.name', 'LIKE', `%${search}%`)
+                    .orWhere('a.description', 'LIKE', `%${search}%`)
+            ));
         }
 
         query.whereRaw('?? = ??', ['u.id', 'a.userId'])
             .whereIn('categoryId', ids);
-        
+    
         query.then(articles => {
             res.json({
                 articles,

@@ -37,6 +37,7 @@ export default {
     }
 }
 </script>
+
 <style>
     .box-container {
         padding: 1% 0;
@@ -49,7 +50,6 @@ export default {
     .box-search .form-control {
         max-width: 250px;
     }
-
     .box-search .fa-trash {
         position: absolute;
         right: 5px;

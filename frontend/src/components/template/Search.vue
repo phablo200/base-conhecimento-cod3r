@@ -1,12 +1,14 @@
 <template>
-    <div class="box-search">
-        <input type="text" 
-            v-model='search' 
-            @keyup="toSearch" 
-            class="form-control"
-            :placeholder="placeholder"
-        />
-        <i @click="clear" class="fa fa-trash"></i>
+    <div class='box-container'>
+        <div class="box-search">
+            <input type="text" 
+                v-model='search' 
+                @keyup="toSearch" 
+                class="form-control"
+                :placeholder="placeholder"
+            />
+            <i @click="clear" class="fa fa-trash"></i>
+        </div>
     </div>
 </template>
 
@@ -36,9 +38,11 @@ export default {
 }
 </script>
 <style>
+    .box-container {
+        padding: 1% 0;
+    }
     .box-search {
         position: relative;
-        padding: 1% 0%;
         display: flex;
         justify-content: flex-end;
     }
@@ -49,7 +53,7 @@ export default {
     .box-search .fa-trash {
         position: absolute;
         right: 5px;
-        top: 25px;
+        top: 25%;
         cursor: pointer;
     }
 </style>

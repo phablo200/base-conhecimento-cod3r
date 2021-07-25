@@ -80,8 +80,14 @@ module.exports = app => {
     }
 
     const get = (req, res) => {
-        app.db('categories')
-            .then(categories => res.json(withPath(categories)))
+        const { search } = req.query;        
+        const query = app.db('categories')
+
+        if (search) {
+            query.where('categories.name', 'LIKE', `%${search}%`);
+        }
+
+        query.then(categories => res.json(withPath(categories)))
             .catch(err => res.status(500).send(err))
     }
 

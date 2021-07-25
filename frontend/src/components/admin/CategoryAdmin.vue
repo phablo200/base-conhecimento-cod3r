@@ -31,6 +31,9 @@
                 
         </b-form>
         <hr/>
+
+        <Search @toSearch="toSearch" />
+
         <b-table hoved striped :items='categories' :fields='fields'>
             <template slot='actions' slot-scope='data'>
                 <b-button variant='warning' @click='loadCategory(data.item)' class='mr-2'>
@@ -48,12 +51,16 @@
 <script>
 import axios from 'axios'
 import { baseApiUrl, showError } from '@/global'
+import Search from '@/components/template/Search';
+
 
 export default {
     name: 'CategoryAdmin',
+    components: {Search},
     data () {
         return {
             mode: 'save',
+            search: '',
             category: {},
             categories: [],
             fields: [
@@ -66,7 +73,9 @@ export default {
     },
     methods: {
         loadCategories() {
-            const url = `${baseApiUrl}/categories`
+            const search = this.search ? `?search=${this.search}` : ''
+
+            const url = `${baseApiUrl}/categories${search}`;
             axios.get(url).then(res => {
                 this.categories = res.data.map(category => {
                     return {...category, value: category.id, text: category.path}
@@ -97,6 +106,10 @@ export default {
         loadCategory (category, mode= 'save') {
             this.mode = mode
             this.category = {...category}
+        },
+        toSearch (search) {
+            this.search = search;
+            this.loadCategories();
         }
     },
     mounted () {

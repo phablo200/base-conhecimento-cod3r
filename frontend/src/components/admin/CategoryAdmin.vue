@@ -53,7 +53,7 @@ export default {
     name: 'CategoryAdmin',
     data () {
         return {
-            mode: 'remove',
+            mode: 'save',
             category: {},
             categories: [],
             fields: [

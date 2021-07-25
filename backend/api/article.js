@@ -48,7 +48,7 @@ module.exports = app => {
         }
     }
 
-    const limit = 10
+    const limit = 50
     const get = async (req, res) => {
         const page = req.query.page || 1
         const search = req.query.search || '';
@@ -65,13 +65,13 @@ module.exports = app => {
                 .orWhere('description', 'LIKE', `%${search}%`);
         }
 
-        const data = {
-            data: await query,
-            count,
-            limit
-        };
-
-        res.json(data);
+        query.then(data => {
+            res.json({
+                data,
+                count,
+                limit
+            });
+        }).catch(err => res.status(500).send(err));
     }
 
     const getById = (req, res) => {
@@ -96,6 +96,7 @@ module.exports = app => {
         let length = app.db({a: 'articles', u: 'users'})
                 .whereRaw('?? = ??', ['u.id', 'a.userId'])
                 .whereIn('categoryId', ids)
+
         if (search) {
             length.where('a.name', 'LIKE', `%${search}%`);
         }   
@@ -114,14 +115,13 @@ module.exports = app => {
 
         query.whereRaw('?? = ??', ['u.id', 'a.userId'])
             .whereIn('categoryId', ids);
-            
-        console.log(query.toSQL().toNative());
-        const data = {
-            articles: await query,
-            length: length.count
-        };
-
-        res.json(data);
+        
+        query.then(articles => {
+            res.json({
+                articles,
+                length: length.count
+            })
+        }).then(err => res.status(500).send(err));
     }
 
     return { save, remove, get, getById, getByCategory }

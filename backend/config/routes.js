@@ -6,7 +6,7 @@ module.exports = app => {
     app.post('/validateToken', app.api.auth.validateToken)
 
     app.route('/users')
-        //.all(app.config.passport.authenticate())
+        .all(app.config.passport.authenticate())
         .post(app.api.user.save)
         .get(app.api.user.get)
 
@@ -33,21 +33,21 @@ module.exports = app => {
         .delete(app.api.category.remove)
 
     app.route('/articles')
-        //.all(app.config.passport.authenticate())    
+        .all(app.config.passport.authenticate())    
         .get(app.api.article.get)
         .post(app.api.article.save)
 
     app.route('/articles/:id')
-        //.all(app.config.passport.authenticate())
+        .all(app.config.passport.authenticate())
         .get(app.api.article.getById)
         .put(admin(app.api.article.save))
         .delete(admin(app.api.article.remove))
 
     app.route('/categories/:id/articles')
-        //.all(app.config.passport.authenticate())
+        .all(app.config.passport.authenticate())
         .get(app.api.article.getByCategory)
 
     app.route('/stats')
-        //.all(app.config.passport.authenticate())
+        .all(app.config.passport.authenticate())
         .get(app.api.stat.get)
 }

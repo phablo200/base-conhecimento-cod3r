@@ -4,14 +4,7 @@ import Card from '../../components/Card';
 import { TouchableOpacity } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import api from '../../services/api';
-
-type Article = {
-  id: number;
-  author: string;
-  description: string;
-  imageUrl?: string;
-  name: string;
-};
+import { Article } from '../../models/Article';
 
 type StackParams = {
   Login: undefined;
@@ -19,7 +12,6 @@ type StackParams = {
 };
 
 type Props = StackScreenProps<StackParams, 'Home'>;
-
 const Home = ({ navigation }: Props) => {
   const [articles, setArticles] = useState([]);
 

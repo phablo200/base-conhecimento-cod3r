@@ -1,8 +1,9 @@
 import { Box, Text, Heading } from 'native-base';
 import styles from './styles';
 import React from 'react';
+import { Article } from '../../models/Article';
 
-const Card = (_props: any) => {
+const Card = (_props: Article) => {
   return (
     <Box style={styles.container}>
       <Box style={styles.boxImg} />

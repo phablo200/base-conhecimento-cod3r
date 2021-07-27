@@ -4,11 +4,18 @@ import {useState} from 'react';
 import styles from './styles';
 import axios from 'axios';
 import {Alert} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {key} from '../../config/storage';
 import {alertError} from '../../services/alert';
+import Storage, {keyUser} from '../../services/storage';
+import {StackScreenProps} from '@react-navigation/stack';
 
-const Login = () => {
+type StackParams = {
+    Login: undefined;
+    Home: undefined;
+};
+
+type Props = StackScreenProps<StackParams, 'Login'>;
+
+const Login = ({navigation}: Props) => {
     const [email, setEmail] = useState('phablovilasboas25@gmail.com');
     const [password, setPassword] = useState('123456');
     const handleLogin = (value: string) => {
@@ -17,6 +24,7 @@ const Login = () => {
     const handlePassowrd = (value: string) => {
         setPassword(value);
     };
+
     const handleClick = () => {
         const auth = {
             email,
@@ -27,26 +35,12 @@ const Login = () => {
             .then(resp => resp.data)
             .then(async data => {
                 try {
-                    await AsyncStorage.setItem(key, JSON.stringify(data));
-                    // Navegar para a tela inicial.
-                    alertError(() => {
-                        console.log('to aqui');
+                    Storage.setItem(keyUser, JSON.stringify(data)).then(() => {
+                        navigation.navigate('Home');
                     });
                 } catch (e) {
-                    Alert.alert(
-                        'Atenção',
-                        'Houve um erro ao salvar os dados iniciais do aplicativo, reiniciei o aplicativo e tente novamente.',
-                        [
-                            {
-                                text: 'Cancel',
-                                onPress: () => console.log('Cancel Pressed'),
-                                style: 'cancel',
-                            },
-                            {
-                                text: 'OK',
-                                onPress: () => console.log('OK Pressed'),
-                            },
-                        ],
+                    alertError(
+                        'Houve um erro ao tentar armazenar os dados do usuário, tente novamente.',
                     );
                 }
             })

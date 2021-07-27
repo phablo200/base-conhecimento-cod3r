@@ -9,8 +9,8 @@
  */
 
 import React from 'react';
-import Login from './src/pages/Login';
 import {NativeBaseProvider} from 'native-base';
+import Login from './src/pages/Login';
 
 const App = () => (
     <NativeBaseProvider>

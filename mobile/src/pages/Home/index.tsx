@@ -1,11 +1,16 @@
+import {ScrollView} from 'react-native';
 import React from 'react';
-import {Text, View} from 'react-native';
+import Card from '../../components/Card';
 
 const Home = () => {
     return (
-        <View>
-            <Text>Home</Text>
-        </View>
+        <ScrollView>
+            <Card />
+            <Card />
+            <Card />
+            <Card />
+            <Card />
+        </ScrollView>
     );
 };
 

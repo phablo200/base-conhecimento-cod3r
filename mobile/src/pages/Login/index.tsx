@@ -1,53 +1,80 @@
 import React from 'react';
 import {FormControl, Stack, Input, Box, Text, Button} from 'native-base';
-import {StyleSheet} from 'react-native';
-import { useState } from 'react';
-
-const styles = StyleSheet.create({
-    container: {
-        height: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        paddingLeft: '5%',
-        paddingRight: '5%',
-    },
-    boxText: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-    },
-    input: {
-        marginTop: '2%',
-    },
-    button: {
-        marginTop: '2%',
-    },
-});
+import {useState} from 'react';
+import styles from './styles';
+import axios from 'axios';
+import {Alert} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {key} from '../../config/storage';
+import {alertError} from '../../services/alert';
 
 const Login = () => {
-    const [login, setLogin] = useState('phablovilasboas25@gmail.com');
-    const [password, setPassword] = useState('12345');
+    const [email, setEmail] = useState('phablovilasboas25@gmail.com');
+    const [password, setPassword] = useState('123456');
     const handleLogin = (value: string) => {
-        setLogin(value);
+        setEmail(value);
     };
     const handlePassowrd = (value: string) => {
         setPassword(value);
     };
-
     const handleClick = () => {
-        alert('Entrar');
+        const auth = {
+            email,
+            password,
+        };
+        axios
+            .post('http://192.168.1.108:3005/signin', auth)
+            .then(resp => resp.data)
+            .then(async data => {
+                try {
+                    await AsyncStorage.setItem(key, JSON.stringify(data));
+                    // Navegar para a tela inicial.
+                    alertError(() => {
+                        console.log('to aqui');
+                    });
+                } catch (e) {
+                    Alert.alert(
+                        'Atenção',
+                        'Houve um erro ao salvar os dados iniciais do aplicativo, reiniciei o aplicativo e tente novamente.',
+                        [
+                            {
+                                text: 'Cancel',
+                                onPress: () => console.log('Cancel Pressed'),
+                                style: 'cancel',
+                            },
+                            {
+                                text: 'OK',
+                                onPress: () => console.log('OK Pressed'),
+                            },
+                        ],
+                    );
+                }
+            })
+            .catch(() => {
+                Alert.alert('Atenção', 'Login ou senha inválida', [
+                    {
+                        text: 'Cancel',
+                        onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'OK',
+                        onPress: () => console.log('OK Pressed'),
+                    },
+                ]);
+            });
     };
-
     return (
         <Box style={styles.container}>
             <Box style={styles.boxText}>
-                <Text>Faça seu login</Text>
+                <Text style={styles.text}>Faça seu login</Text>
             </Box>
-            <FormControl isRequired>
+
+            <FormControl isRequired style={styles.formControl}>
                 <Stack>
                     <Input
                         type="text"
-                        value={login}
+                        value={email}
                         style={styles.input}
                         placeholder="Login"
                         onChange={e => handleLogin(e.target.value)}

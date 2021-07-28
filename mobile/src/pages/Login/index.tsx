@@ -2,8 +2,6 @@ import React from 'react';
 import { FormControl, Stack, Input, Box, Text, Button } from 'native-base';
 import { useState } from 'react';
 import styles from './styles';
-import axios from 'axios';
-import { Alert } from 'react-native';
 import { alertError } from '../../services/alert';
 import Storage, { keyUser } from '../../services/storage';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -39,6 +37,7 @@ const Login = ({ navigation }: Props) => {
       .post('signin', auth)
       .then(resp => resp.data)
       .then(async data => {
+        api.defaults.headers.common.Authorization = `bearer ${data.token}`;
         try {
           Storage.setItem(keyUser, JSON.stringify(data)).then(() => {
             navigation.navigate('Home');
@@ -48,17 +47,7 @@ const Login = ({ navigation }: Props) => {
         }
       })
       .catch(() => {
-        Alert.alert('Atenção', 'Login ou senha inválida', [
-          {
-            text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel',
-          },
-          {
-            text: 'OK',
-            onPress: () => console.log('OK Pressed'),
-          },
-        ]);
+        alertError('Login ou senha inválida');
       });
   };
   return (

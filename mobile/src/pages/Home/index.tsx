@@ -10,12 +10,24 @@ type Props = StackScreenProps<StackParams, 'Home'>;
 const Home = ({ navigation }: Props) => {
   const [articles, setArticles] = useState([]);
 
-  useEffect(() => {
+  const getArticles = (isCancelled: boolean) => {
     api
       .get('categories/24/articles?page=1&search=')
       .then(resp => resp.data.articles)
-      .then(setArticles)
+      .then(articles => {
+        if (!isCancelled) {
+          setArticles(articles);
+        }
+      })
       .catch(console.log);
+  };
+
+  useEffect(() => {
+    let isCancelled = false;
+    getArticles(isCancelled);
+    return () => {
+      isCancelled = true;
+    };
   }, [articles]);
 
   const handleClick = (id: number): void => {
@@ -30,7 +42,6 @@ const Home = ({ navigation }: Props) => {
         </TouchableOpacity>
       ));
     }
-
     return false;
   };
 

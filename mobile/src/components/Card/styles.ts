@@ -6,12 +6,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     padding: '2%',
-    borderBottomWidth: 0.3,
+    backgroundColor: '#FFF',
     marginTop: '1%',
   },
   boxImg: {
     flexBasis: '30%',
     borderRightWidth: 0.2,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  img: {
+    width: 50,
+    height: 200,
+    resizeMode: 'stretch'
   },
   boxInf: {
     display: 'flex',

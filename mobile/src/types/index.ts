@@ -4,4 +4,5 @@ export type Article = {
   description: string;
   imageUrl?: string;
   name: string;
+  content?: string;
 };

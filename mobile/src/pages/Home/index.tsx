@@ -1,16 +1,10 @@
-import { ScrollView, Text } from 'react-native';
+import { ScrollView } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import Card from '../../components/Card';
 import { TouchableOpacity } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import api from '../../services/api';
-import { Article } from '../../models/Article';
-
-type StackParams = {
-  Login: undefined;
-  Home: undefined;
-  Article: undefined;
-};
+import { StackParams, Article } from '../../types';
 
 type Props = StackScreenProps<StackParams, 'Home'>;
 const Home = ({ navigation }: Props) => {
@@ -25,15 +19,14 @@ const Home = ({ navigation }: Props) => {
   }, [articles]);
 
   const handleClick = (id: number): void => {
-    console.log('id', id);
-    navigation.navigate('Article');
+    navigation.navigate('Article', { id });
   };
 
   const renderArticles = () => {
     if (articles.length) {
       return articles.map((article: Article) => (
         <TouchableOpacity key={article.id} onPress={() => handleClick(article.id)}>
-          <Card {...article}></Card>
+          <Card {...article} />
         </TouchableOpacity>
       ));
     }

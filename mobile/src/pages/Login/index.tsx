@@ -8,14 +8,10 @@ import { alertError } from '../../services/alert';
 import Storage, { keyUser } from '../../services/storage';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useEffect } from 'react';
-
-type StackParams = {
-  Login: undefined;
-  Home: undefined;
-};
+import { StackParams } from '../../types';
+import api, { apiInit } from '../../services/api';
 
 type Props = StackScreenProps<StackParams, 'Login'>;
-
 const Login = ({ navigation }: Props) => {
   const [email, setEmail] = useState('phablovilasboas25@gmail.com');
   const [password, setPassword] = useState('123456');
@@ -39,8 +35,8 @@ const Login = ({ navigation }: Props) => {
       email,
       password,
     };
-    axios
-      .post('http://192.168.1.108:3005/signin', auth)
+    api
+      .post('signin', auth)
       .then(resp => resp.data)
       .then(async data => {
         try {

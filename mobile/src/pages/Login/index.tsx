@@ -7,6 +7,7 @@ import { Alert } from 'react-native';
 import { alertError } from '../../services/alert';
 import Storage, { keyUser } from '../../services/storage';
 import { StackScreenProps } from '@react-navigation/stack';
+import { useEffect } from 'react';
 
 type StackParams = {
   Login: undefined;
@@ -24,6 +25,14 @@ const Login = ({ navigation }: Props) => {
   const handlePassowrd = (value: string) => {
     setPassword(value);
   };
+
+  useEffect(() => {
+    Storage.getItem(keyUser).then(user => {
+      if (user) {
+        navigation.navigate('Home');
+      }
+    });
+  }, [navigation]);
 
   const handleClick = () => {
     const auth = {

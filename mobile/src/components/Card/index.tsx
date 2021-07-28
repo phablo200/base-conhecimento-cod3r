@@ -8,13 +8,13 @@ const Card = (_props: Article) => {
     <Box style={styles.container}>
       <Box style={styles.boxImg} />
       <Box style={styles.boxInf}>
-        <Heading style={styles.title}>Configuração</Heading>
+        <Heading style={styles.title}>{_props.name}</Heading>
         <Box>
           <Heading style={styles.subtitle} size="sm">
-            Detalhes da configuração de um projeto React Native
+            {_props.description}
           </Heading>
         </Box>
-        <Text style={styles.author}>Autor: Phablo Vilas Boas</Text>
+        <Text style={styles.author}>{_props.author}</Text>
       </Box>
     </Box>
   );

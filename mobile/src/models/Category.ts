@@ -1,3 +1,6 @@
 export type Category = {
-    // type to category 
+  id: number;
+  name: string;
+  parentId?: number;
+  path: string;
 };

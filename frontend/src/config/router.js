@@ -31,15 +31,14 @@ const routes = [{
     name: 'auth',
     path: '/auth',
     component: Auth
-}]
+}];
 
 const router = new VueRouter({
-    base: '/studies',
+    base: '',
     mode: 'history',
     routes
-})
+});
 
- 
 router.beforeEach((to, from, next) => {
     const json = localStorage.getItem(userKey)
 
@@ -49,6 +48,6 @@ router.beforeEach((to, from, next) => {
     } else {
         next()
     }
-})
+});
 
 export default router

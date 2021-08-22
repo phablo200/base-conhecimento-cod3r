@@ -1,0 +1,3 @@
+PM2
+#STATUS
+./node_modules/.bin/pm2 status

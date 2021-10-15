@@ -31,7 +31,6 @@ import UserAdmin from './UserAdmin'
 export default {
     name: 'AdminPages',
     components: { PageTitle, ArticleAdmin, CategoryAdmin, UserAdmin }
-
 }
 </script>
 

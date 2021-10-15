@@ -1,0 +1,17 @@
+PM2
+#START
+npm run production
+#STATUS
+./node_modules/.bin/pm2 status
+
+# BUILD IMAGE DOCKER
+sudo docker image build -t backend-knowledge .
+
+# BUILD CONTAINER backend-knowledge
+docker run -p 3005:3005 backend-knowledge -name backend-knowledge
+
+# CHECK YOUR CONTAINER
+docker exec -it backend-knowledge /bin/bash
+
+# START COMPOSER em background
+sudo docker-compose up -d

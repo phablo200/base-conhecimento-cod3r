@@ -27,6 +27,7 @@
     "pm2": "3.0.4"
   },
   "devDependencies": {
+    "@babel/preset-react": "^7.14.5",
     "nodemon": "1.18.4"
   }
 }

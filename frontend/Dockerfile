@@ -1,9 +1,11 @@
-FROM nginx
+FROM node:16
 
-WORKDIR /usr/share/nginx/html
+WORKDIR /usr/app
+COPY ./ .
 
-COPY ./dist .
+RUN yarn
 
-EXPOSE 80
+EXPOSE 8080
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["yarn", "serve"]
+

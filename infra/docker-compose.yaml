@@ -1,11 +1,31 @@
 version: "3.7"
 
 services:
+  database:
+    image: postgres
+    container_name: db-knowledge
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=knowledge
+    volumes:
+      - pgdata:/data/postgres
   backend:
     build: ../backend
     container_name: backend-knowledge
     ports:
       - 3005:3005
-    volumes:
-      - ../backend:/app
-    
+    links:
+      - database
+    depends_on:
+      - database
+  frontend:
+    build: ../frontend
+    container_name: frontend-knowledge
+    ports:
+      - 8080:8080
+volumes:
+  pgdata:

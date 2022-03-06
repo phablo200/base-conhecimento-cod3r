@@ -1,2 +1,5 @@
 frontend/node_modules
+_backups
 backend/node_modules
+backups
+DB

@@ -1,11 +1,13 @@
-FROM node:alpine
+FROM node:16
 
 WORKDIR /app
 
+RUN rm -fR *
+
 COPY package.json .
+COPY .env .
 
-RUN yarn
-
+RUN npm install
 COPY . .
 
 EXPOSE 3005
